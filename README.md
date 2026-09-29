@@ -38,7 +38,7 @@ and trophy rooms. On top of that it adds widescreen support, an FOV slider, a fr
 ## Download
 
 Ready-built programs for Linux and Windows are on the
-[releases page](https://github.com/2cupscarn/carnivores-rust-rewrite/releases)
+[releases page](https://github.com/shamblerq/carnivores-rust-rewrite/releases)
 
 - **Linux**: `omnivores-rust-<version>-linux-x86_64.tar.xz`. Unpack it and
   run `omnivores-rust`. It should support most up to date Linux distros from 2022 and later (Ubuntu 22.04,

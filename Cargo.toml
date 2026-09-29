@@ -14,7 +14,7 @@ version = "1.0.2"
 edition = "2021"
 rust-version = "1.87"
 license = "GPL-3.0-or-later"
-repository = "https://github.com/2cupscarn/carnivores-rust-rewrite"
+repository = "https://github.com/shamblerq/carnivores-rust-rewrite"
 
 [workspace.dependencies]
 carn_formats = { path = "crates/carn_formats" }

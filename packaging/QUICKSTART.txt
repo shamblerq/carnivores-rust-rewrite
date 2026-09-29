@@ -29,4 +29,4 @@ Double-click a game to play it. Right-click one for its own menu entry or
 desktop shortcut, and more.
 
 The full manual is README.md, and the project is at
-https://github.com/2cupscarn/carnivores-rust-rewrite
+https://github.com/shamblerq/carnivores-rust-rewrite
