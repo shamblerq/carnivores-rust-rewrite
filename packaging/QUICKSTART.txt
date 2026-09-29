@@ -1,0 +1,32 @@
+Omnivores Rust @VERSION@
+========================
+
+A launcher for Carnivores, Carnivores 2 and Carnivores: Ice Age, rewritten
+in Rust, and for their mods. You need your own copies of the games: this
+download holds none of their data.
+
+1. Start omnivores-rust (omnivores-rust.exe on Windows).
+
+   On Windows, SmartScreen may say it "protected your PC", as it does for
+   any program it has not seen before: choose More info, then Run anyway.
+
+2. Choose "Add games..." to bring in your games and mods: from their
+   folders (an old install, a CD, a Wine prefix), from the archives mods
+   come in (.zip, and .7z or .rar with 7-Zip installed), or let it find
+   them on this computer. Folders and archives can also be dropped on its
+   window.
+
+   A mod that holds only the files it changes is laid over a copy of its
+   game, as its readme would have you do by hand.
+
+3. To start it like any other program, say yes when it offers to add
+   itself to your applications menu (Start menu on Windows) and desktop,
+   or choose Settings, then Install. It copies itself to a folder of its
+   own, and this folder can then be deleted. Uninstall is on the same
+   page, and on Windows in the system's list of installed apps too.
+
+Double-click a game to play it. Right-click one for its own menu entry or
+desktop shortcut, and more.
+
+The full manual is README.md, and the project is at
+https://github.com/2cupscarn/carnivores-rust-rewrite

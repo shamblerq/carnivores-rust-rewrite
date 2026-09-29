@@ -1,0 +1,19 @@
+[package]
+name = "carn_engine"
+description = "The shared Bevy engine behind the Carnivores, Carnivores 2 and Ice Age rewrites"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+carn_formats.workspace = true
+bevy.workspace = true
+bevy_framepace.workspace = true
+cpal.workspace = true
+
+# The window's icon from the program's own resources (lib.rs, window_icon);
+# the same winit Bevy's windowing uses.
+[target.'cfg(windows)'.dependencies]
+winit = { version = "0.30", default-features = false }

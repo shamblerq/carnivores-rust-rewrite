@@ -1,0 +1,15 @@
+[package]
+name = "carnivores-iceage"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+build = "../windows_icon.rs"
+
+[[bin]]
+name = "carnivores-iceage-rs"
+path = "src/main.rs"
+
+[dependencies]
+carn_engine.workspace = true

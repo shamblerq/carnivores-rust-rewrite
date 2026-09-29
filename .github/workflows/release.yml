@@ -1,0 +1,102 @@
+# The ready-built programs: the Linux and the Windows archive, both built on
+# Linux as README.md describes (packaging/package.sh), published as a GitHub
+# release.
+#
+# Push a tag named after the version in Cargo.toml (v1.0.2), or run it from
+# the Actions tab: with "publish" ticked it tags the commit v<version> and
+# publishes the release itself; without, it only builds the archives, which
+# the run keeps for download.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish a release tagged v<version in Cargo.toml>
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [linux, windows]
+    # The oldest Ubuntu GitHub offers: the Linux programs need the C library
+    # they were built against or newer (glibc 2.35).
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          if [ "${{ matrix.target }}" = windows ]; then
+            rustup target add x86_64-pc-windows-gnu
+          fi
+
+      - name: Libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config libasound2-dev \
+            libudev-dev libwayland-dev libxkbcommon-dev libx11-dev xz-utils zip
+          if [ "${{ matrix.target }}" = windows ]; then
+            sudo apt-get install -y gcc-mingw-w64-x86-64
+          fi
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+
+      - name: Test
+        if: matrix.target == 'linux'
+        run: RUSTFLAGS="--remap-path-prefix=$HOME=~" cargo test --release --locked -p omnivores-rust -p carn_formats
+
+      - name: Build and pack
+        run: packaging/package.sh ${{ matrix.target }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: omnivores-rust-${{ matrix.target }}
+          path: |
+            dist/*.tar.xz
+            dist/*.zip
+          if-no-files-found: error
+          # Packed already.
+          compression-level: 0
+
+  release:
+    needs: build
+    if: github.ref_type == 'tag' || inputs.publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n 1)
+          if [ "$GITHUB_REF_TYPE" = tag ]; then tag=$GITHUB_REF_NAME; else tag=v$version; fi
+          if [ "$tag" != "v$version" ]; then
+            echo "::error::The tag $tag does not match the version in Cargo.toml ($version)."
+            exit 1
+          fi
+          sed "s/@VERSION@/$version/g" packaging/release-notes.md > notes.md
+          (cd dist && sha256sum -- * > SHA256SUMS)
+          gh release create "$tag" dist/* \
+            --target "$GITHUB_SHA" \
+            --title "Omnivores Rust $version" \
+            --notes-file notes.md \
+            --generate-notes

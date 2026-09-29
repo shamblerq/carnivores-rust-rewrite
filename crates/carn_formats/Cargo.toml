@@ -1,0 +1,10 @@
+[package]
+name = "carn_formats"
+description = "Readers for the Carnivores data files: areas, models, characters, pictures and sounds"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]

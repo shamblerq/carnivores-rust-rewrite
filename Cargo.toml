@@ -1,0 +1,37 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/carn_formats",
+    "crates/carn_engine",
+    "games/carnivores1",
+    "games/carnivores2",
+    "games/carnivores-iceage",
+    "launcher",
+]
+
+[workspace.package]
+version = "1.0.2"
+edition = "2021"
+rust-version = "1.87"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/2cupscarn/carnivores-rust-rewrite"
+
+[workspace.dependencies]
+carn_formats = { path = "crates/carn_formats" }
+carn_engine = { path = "crates/carn_engine" }
+bevy = { version = "0.16", features = ["wayland", "wav"] }
+bevy_framepace = "0.19"
+# The sound output (carn_engine's audio.rs).
+cpal = { version = "0.15", default-features = false }
+
+# The game code is plain arithmetic in tight loops; unoptimised it is too slow
+# to play, so even debug builds optimise the dependencies and a little of ours.
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+codegen-units = 16
+strip = true
